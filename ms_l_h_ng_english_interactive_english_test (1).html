@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Học Tiếng Anh cùng Ms Lê Hằng English - Gamification Test</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&family=Quicksand:wght@500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        :root {
+            --primary: #8854C0;
+            --accent-yellow: #FDCB6E;
+            --accent-teal: #00C9A7;
+            --correct-green: #00D26A;
+            --wrong-red: #FF4757;
+            --text-dark: #2C3E50;
+            --text-light: #FFFFFF;
+            --card-shadow: 0 12px 0px rgba(0,0,0,0.1);
+            --btn-3d-shadow: 0 6px 0px rgba(0,0,0,0.15);
+        }
+
+        body {
+            font-family: 'Quicksand', 'Nunito', sans-serif;
+            background: linear-gradient(-45deg, #00C9A7, #8854C0, #FDCB6E, #E0C3FC);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            min-height: 100vh;
+            color: var(--text-dark);
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Fun SVG pattern overlay */
+        .bg-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+            opacity: 0.08;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M15 15 L20 25 L10 25 Z M50 60 C55 50, 65 50, 70 60 Z M65 20 A8 8 0 1 1 65 20.1 Z'/%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        /* 3D Gamified Buttons */
+        .btn-3d {
+            transition: all 0.1s ease;
+            box-shadow: 0 6px 0px var(--primary);
+        }
+        .btn-3d:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 0px var(--primary);
+        }
+        .btn-3d:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0px var(--primary);
+        }
+
+        /* Beautiful warning card matching image_9bc7e1.jpg */
+        .warning-box {
+            background: linear-gradient(135deg, #FFF8E7, #FFEAA7);
+            border: 4px solid var(--accent-yellow);
+            border-radius: 24px;
+            box-shadow: var(--card-shadow);
+            transform: rotate(-0.5deg);
+        }
+
+        /* Active tab state */
+        .tab-active {
+            background-color: var(--primary) !important;
+            color: white !important;
+            box-shadow: 0 4px 0px #5e3291 !important;
+            transform: translateY(2px);
+        }
+
+        /* Shake animation for incorrect choices */
+        .shake {
+            animation: shake 0.4s ease-in-out;
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        /* Floating particles */
+        #confetti-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        /* Visual styling for Q29 sale-sign & Q30 phone mockup */
+        .sale-sign {
+            background: linear-gradient(135deg, #FF4757, #EE5253);
+            border: 4px solid #FFF;
+            box-shadow: 0 8px 0 #D63031, 0 12px 20px rgba(0,0,0,0.15);
+            transform: rotate(-3deg);
+        }
+        .phone-chat {
+            background: #FFF;
+            border: 8px solid #2C3E50;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body class="pb-24">
+
+    <div class="bg-pattern"></div>
+    <canvas id="confetti-canvas"></canvas>
+
+    <div class="container mx-auto px-4 max-w-4xl pt-6">
+        <!-- Header area -->
+        <header class="text-center mb-6">
+            <div class="inline-flex items-center gap-2 bg-black/35 text-white py-1.5 px-4 rounded-full text-sm font-bold mb-3 shadow-lg border border-white/20">
+                <i class="fa-solid fa-graduation-cap text-yellow-300"></i> Giáo viên tạo: Ms Lê Hằng English
+            </div>
+            <h1 class="text-3xl md:text-4xl font-extrabold text-white drop-shadow-[0_4px_0_rgba(0,0,0,0.2)] tracking-wide flex justify-center items-center gap-2">
+                🌟 Ôn Tập Tiếng Anh Siêu Cấp 🌟
+            </h1>
+        </header>
+
+        <!-- Warning Alert Box matching image_9bc7e1.jpg -->
+        <div class="warning-box p-5 md:p-6 mb-8 text-center border-4">
+            <h3 class="text-xl font-black text-amber-800 flex justify-center items-center gap-2 mb-2">
+                <i class="fa-solid fa-triangle-exclamation text-2xl text-red-500 animate-bounce"></i> 
+                LỜI NHẮC CỰC KỲ QUAN TRỌNG 
+                <i class="fa-solid fa-triangle-exclamation text-2xl text-red-500 animate-bounce"></i>
+            </h3>
+            <p class="text-amber-900 font-bold text-sm md:text-base leading-relaxed max-w-2xl mx-auto">
+                Chỉ có <span class="text-red-500 underline decoration-2">đọc kỹ giải thích ngay sau mỗi câu</span>, sau đó ghi lại từ vựng/cấu trúc mới vào vở để học thì mới thực sự giỏi lên.
+            </p>
+            <p class="text-amber-800 font-medium text-xs md:text-sm mt-2 opacity-90">
+                Làm cho xong mà không đọc giải thích hay đọc qua loa không ghi chép thì chỉ tốn thời gian vô ích!
+            </p>
+            <div class="mt-3 text-purple-700 font-black tracking-widest text-sm animate-pulse">
+                * Kéo tới đâu, làm tới đó! *
+            </div>
+        </div>
+
+        <!-- Exercise Selection Tabs (Các bài ở trên) -->
+        <div class="mb-8">
+            <p class="text-white font-black text-center mb-3 drop-shadow text-sm tracking-wider uppercase">
+                <i class="fa-solid fa-circle-chevron-down"></i> Chọn phần thi bài tập dưới đây:
+            </p>
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2.5 bg-white/45 p-3 rounded-3xl shadow-inner backdrop-blur-md border border-white/30" id="tabs-container">
+                <!-- Tabs are dynamically inserted here -->
+            </div>
+        </div>
+
+        <!-- Active Question Card Display Area -->
+        <main class="bg-white rounded-[32px] p-6 md:p-8 shadow-[0_16px_0px_rgba(0,0,0,0.15)] border-4 border-purple-200 relative min-h-[400px]">
+            <div id="exercise-view" class="transition-all duration-300">
+                <!-- Active questions list rendered dynamically here -->
+            </div>
+        </main>
+    </div>
+
+    <!-- Custom interactive selection overlay for gap filling -->
+    <div id="selector-overlay" class="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 hidden backdrop-blur-sm">
+        <div class="bg-white rounded-3xl p-6 w-full max-w-sm border-4 border-purple-500 shadow-2xl transform scale-95 transition-transform duration-200" id="selector-box">
+            <h4 class="text-purple-700 font-black text-lg text-center mb-4 flex items-center justify-center gap-2">
+                <i class="fa-solid fa-circle-question text-yellow-400"></i> Chọn đáp án chính xác:
+            </h4>
+            <div class="space-y-2.5" id="choices-anchor">
+                <!-- Popup choices appear here -->
+            </div>
+            <button class="w-full mt-4 bg-gray-200 text-gray-700 font-bold py-2 rounded-xl border-b-4 border-gray-400 active:border-b-0 active:translate-y-1 transition-all text-sm" onclick="closeSelector()">
+                Đóng lại
+            </button>
+        </div>
+    </div>
+
+    <!-- Fixed Footer Progress & Score matching layout in image_9bc7e1.jpg -->
+    <footer class="fixed bottom-0 left-0 w-full bg-white border-t-4 border-gray-100 px-4 py-3 shadow-[0_-8px_30px_rgba(0,0,0,0.1)] flex items-center justify-between gap-4 z-40">
+        <div class="flex items-center gap-3">
+            <div class="bg-yellow-100 text-amber-700 py-1.5 px-3 md:px-4 rounded-2xl flex items-center gap-2 font-black text-sm md:text-base border border-yellow-300 shadow-sm">
+                <i class="fa-solid fa-star text-yellow-400 animate-spin-slow"></i>
+                <span>Điểm của con: <span id="star-score-text" class="text-purple-700 text-lg">0</span></span>
+            </div>
+            <!-- Progress bar -->
+            <div class="hidden sm:block w-40 md:w-60 bg-gray-200 h-4 rounded-full overflow-hidden shadow-inner border border-gray-300">
+                <div class="bg-gradient-to-r from-teal-400 to-green-400 h-full w-0 transition-all duration-300 rounded-full" id="progress-bar-fill"></div>
+            </div>
+        </div>
+        <button onclick="submitTest()" class="bg-gradient-to-r from-emerald-400 to-emerald-500 text-white font-black px-6 py-2.5 rounded-2xl shadow-[0_5px_0px_#059669] hover:brightness-110 active:translate-y-1 active:shadow-none transition-all flex items-center gap-2 text-sm md:text-base">
+            <i class="fa-solid fa-paper-plane"></i> NỘP BÀI
+        </button>
+    </footer>
+
+    <!-- Result Modal dialog -->
+    <div id="result-modal" class="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 hidden backdrop-blur-sm">
+        <div class="bg-white rounded-[32px] p-6 md:p-8 w-full max-w-lg border-4 border-emerald-400 shadow-2xl text-center">
+            <div class="text-6xl mb-3">👩‍🏫</div>
+            <h3 class="text-2xl font-black text-purple-700 mb-2">Ms Lê Hằng English Đánh Giá</h3>
+            <div class="bg-purple-50 p-4 rounded-2xl border-2 border-dashed border-purple-200 mb-4">
+                <p class="text-gray-500 font-bold text-sm">Điểm số đạt được:</p>
+                <p class="text-4xl font-extrabold text-emerald-500" id="result-score-percent">0%</p>
+                <p class="text-xs text-purple-500 mt-1 font-bold" id="result-score-fraction">(0/0 câu đúng)</p>
+            </div>
+            <p class="text-gray-700 font-bold text-base md:text-lg mb-6 px-2 leading-relaxed" id="result-comment"></p>
+            <div class="flex gap-3">
+                <button onclick="restartTest()" class="flex-1 bg-yellow-400 text-amber-900 border-b-4 border-yellow-600 font-black py-3 rounded-2xl active:translate-y-1 active:border-b-0 transition-all">
+                    Làm lại bài <i class="fa-solid fa-rotate"></i>
+                </button>
+                <button onclick="closeResultModal()" class="flex-1 bg-gray-200 text-gray-700 border-b-4 border-gray-400 font-black py-3 rounded-2xl active:translate-y-1 active:border-b-0 transition-all">
+                    Xem lại đáp án
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // WEB AUDIO API SOUND ENGINE
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        let audioCtx = null;
+
+        function playSound(type) {
+            try {
+                if (!audioCtx) audioCtx = new AudioContextClass();
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+                
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                if (type === 'correct') {
+                    // Chime ding ding
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(523.25, audioCtx.currentTime); // C5
+                    gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.3);
+
+                    setTimeout(() => {
+                        const osc2 = audioCtx.createOscillator();
+                        const gain2 = audioCtx.createGain();
+                        osc2.connect(gain2);
+                        gain2.connect(audioCtx.destination);
+                        osc2.type = 'sine';
+                        osc2.frequency.setValueAtTime(659.25, audioCtx.currentTime); // E5
+                        gain2.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                        gain2.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+                        osc2.start();
+                        osc2.stop(audioCtx.currentTime + 0.3);
+                    }, 120);
+                } else if (type === 'wrong') {
+                    // Buzz
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(150, audioCtx.currentTime);
+                    osc.frequency.linearRampToValueAtTime(80, audioCtx.currentTime + 0.4);
+                    gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.4);
+                }
+            } catch (err) {
+                console.log("Audio synthesis error: ", err);
+            }
+        }
+
+        // CONFETTI LAUNCHER
+        const canvas = document.getElementById('confetti-canvas');
+        const ctx = canvas.getContext('2d');
+        let confettis = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        function spawnConfetti() {
+            confettis = [];
+            for (let i = 0; i < 80; i++) {
+                confettis.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height - canvas.height,
+                    size: Math.random() * 8 + 6,
+                    color: ['#8854C0', '#FDCB6E', '#00C9A7', '#FF4757', '#00D26A'][Math.floor(Math.random() * 5)],
+                    speedY: Math.random() * 5 + 3,
+                    speedX: Math.random() * 4 - 2,
+                    rotation: Math.random() * 360,
+                    rotationSpeed: Math.random() * 4 - 2
+                });
+            }
+            animateConfetti();
+        }
+
+        function animateConfetti() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            let alive = false;
+            confettis.forEach(c => {
+                c.y += c.speedY;
+                c.x += c.speedX;
+                c.rotation += c.rotationSpeed;
+                if (c.y < canvas.height) {
+                    alive = true;
+                    ctx.save();
+                    ctx.translate(c.x, c.y);
+                    ctx.rotate(c.rotation * Math.PI / 180);
+                    ctx.fillStyle = c.color;
+                    ctx.fillRect(-c.size / 2, -c.size / 2, c.size, c.size);
+                    ctx.restore();
+                }
+            });
+            if (alive) requestAnimationFrame(animateConfetti);
+        }
+
+        // FULL 100% COMPLETE DATASET
+        const exercises = {
+            "ex3": {
+                title: "Exercise 3: Choose the odd one out in each group",
+                desc: "Tìm từ khác loại với các từ còn lại trong nhóm.",
+                questions: [
+                    { id: "3_1", q: "Tìm từ khác biệt:", options: ["plough", "cultivate", "harvest", "summer"], answer: "summer", type: "mcq", exp: "A. plough (v): cày ruộng; B. cultivate (v): gieo trồng; C. harvest (v): gặt hái; D. summer (n): mùa hè. Chọn D vì đây là danh từ chỉ mùa, các từ còn lại đều là động từ chỉ hoạt động sản xuất nông nghiệp." },
+                    { id: "3_2", q: "Tìm từ khác biệt:", options: ["cow", "buffalo", "hen", "pig"], answer: "hen", type: "mcq", exp: "A. cow (n): bò; B. buffalo (n): trâu; C. hen (n): gà mái; D. pig (n): heo. Chọn C vì gà mái là gia cầm (loài hai chân có cánh), các loài còn lại thuộc nhóm gia súc lớn 4 chân." },
+                    { id: "3_3", q: "Tìm từ khác biệt:", options: ["train", "bus", "car", "harvester"], answer: "harvester", type: "mcq", exp: "A. train (n): xe lửa; B. bus (n): xe buýt; C. car (n): xe ô tô; D. harvester (n): máy gặt liên hợp. Chọn D vì máy gặt là công cụ lao động chuyên dụng, các từ còn lại là phương tiện di chuyển vận tải thông thường." },
+                    { id: "3_4", q: "Tìm từ khác biệt:", options: ["peaceful", "paddy field", "orchard", "pond"], answer: "peaceful", type: "mcq", exp: "A. peaceful (adj): yên bình; B. paddy field (n): ruộng lúa; C. orchard (n): vườn cây ăn quả; D. pond (n): ao nước. Chọn A vì đây là tính từ miêu tả đặc tính, ba từ còn lại đều là danh từ chỉ địa điểm phong cảnh." },
+                    { id: "3_5", q: "Tìm từ khác biệt:", options: ["milk cows", "picturesque", "dry rice", "feed pigs"], answer: "picturesque", type: "mcq", exp: "A. milk cows (v): vắt sữa bò; B. picturesque (adj): đẹp như tranh; C. dry rice (v): phơi thóc; D. feed pigs (v): cho heo ăn. Chọn B vì đây là tính từ miêu tả vẻ đẹp, các cụm còn lại là động từ chỉ hoạt động nông nghiệp." }
+                ]
+            },
+            "ex4_p1": {
+                title: "Exercise 4 (Part 1: Q1-25): Best fits matching space",
+                desc: "Chọn đáp án tốt nhất để hoàn thành câu (Câu 1 - 25).",
+                questions: [
+                    { id: "4_1", q: "The farmers in this village are _________ and hospitable.", options: ["slowly", "hard-working", "hardly", "badly"], answer: "hard-working", type: "mcq", exp: "A. slowly (adv): chậm chạp; B. hard-working (adj): chăm chỉ; C. hardly (adv): hầu như không; D. badly (adv): tồi tệ. Ta cần một tính từ đứng sau tobe 'are' để song hành với 'hospitable'. Chọn B." },
+                    { id: "4_2", q: "Lucy dances _________ than Mary does.", options: ["beautiful", "beautifully", "more beautifully", "more beautiful"], answer: "more beautifully", type: "mcq", exp: "Dances là động từ thường nên phải bổ nghĩa bằng trạng từ (beautifully). Có từ 'than' ở dạng so sánh hơn nên dùng 'more beautifully' (trạng từ dài). Chọn C." },
+                    { id: "4_3", q: "After an hour walking between the green paddy _______, we finally reached the village entrance.", options: ["places", "fields", "yards", "courts"], answer: "fields", type: "mcq", exp: "Cụm từ cố định: 'paddy field' nghĩa là cánh đồng lúa nước. Chọn B." },
+                    { id: "4_4", q: "We can enjoy the fresh air and beauty in the_______.", options: ["city", "factory", "countryside", "gas station"], answer: "countryside", type: "mcq", exp: "A. city (n): thành phố; B. factory (n): nhà máy; C. countryside (n): vùng quê; D. gas station (n): trạm xăng. Chọn C vì vùng nông thôn mới mang lại không khí trong lành tự nhiên." },
+                    { id: "4_5", q: "The small bamboo forest _______ the entrance to the village makes it picturesque.", options: ["at", "in", "on", "to"], answer: "at", type: "mcq", exp: "Giới từ 'at the entrance' dùng để chỉ vị trí chính xác tại lối đi vào cổng làng. Chọn A." },
+                    { id: "4_6", q: "Alice met Aly’s family at his house _______ the early morning.", options: ["on", "at", "in", "about"], answer: "in", type: "mcq", exp: "Cụm chỉ thời gian trong ngày: 'in the early morning' (vào sáng sớm). Chọn C." },
+                    { id: "4_7", q: "I am _______ on visiting my grandparents' on the weekend.", options: ["fond", "keen", "interested", "bored"], answer: "keen", type: "mcq", exp: "Cấu trúc đi liền giới từ: 'be keen on' (say mê, thích thú). Loại A vì 'fond of', loại C vì 'interested in', loại D vì 'bored with'." },
+                    { id: "4_8", q: "She walked _________ than other people on the street because she got up late.", options: ["quickly", "quick", "quicker", "more quickly"], answer: "more quickly", type: "mcq", exp: "Walk là động từ thường nên cần bổ nghĩa bằng trạng từ 'quickly'. So sánh hơn của trạng từ dài là 'more quickly'. Chọn D." },
+                    { id: "4_9", q: "His sister plays badminton _________ than I do.", options: ["best", "better", "good", "well"], answer: "better", type: "mcq", exp: "Plays là động từ thường nên cần trạng từ 'well'. Trạng từ so sánh hơn bất quy tắc của 'well' là 'better'. Chọn B." },
+                    { id: "4_10", q: "Russia is a _______ country with a lot of natural resources.", options: ["vast", "envious", "cultivable", "far"], answer: "vast", type: "mcq", exp: "A. vast (adj): bao la, rộng lớn; B. envious (adj): đố kị; C. cultivable (adj): có thể trồng trọt; D. far (adj): xa xôi. Chọn A để phù hợp với diện tích và quy mô quốc gia giàu tài nguyên như Nga." },
+                    { id: "4_11", q: "Farmers often leave the rice in the sun to _______.", options: ["damp", "wet", "warm", "dry"], answer: "dry", type: "mcq", exp: "Hành động phơi nắng nông sản sau khi gặt để lúa hạt được khô ráo tránh mọc mầm là 'dry' (phơi khô). Chọn D." },
+                    { id: "4_12", q: "They _______ the buffalo-drawn cart with hay.", options: ["built", "hugged", "loaded", "milked"], answer: "loaded", type: "mcq", exp: "Cấu trúc: 'load something with something' (chất, xếp cái gì đó lên trên xe). Ở đây là chất đầy rơm khô (hay) lên xe kéo dắt bởi trâu. Chọn C." },
+                    { id: "4_13", q: "Farmers always need extra help with the _______.", options: ["accident", "harvest", "explosion", "cattle"], answer: "harvest", type: "mcq", exp: "A. accident (n): tai nạn; B. harvest (n): vụ thu hoạch; C. explosion (n): vụ nổ; D. cattle (n): gia súc. Vào ngày gặt mùa màng nông dân cực kỳ bận rộn nên cần nhiều người phụ giúp. Chọn B." },
+                    { id: "4_14", q: "My uncle raises a herd of _______ on his farm.", options: ["cattle", "fruit", "countryside", "village"], answer: "cattle", type: "mcq", exp: "Cụm từ chỉ bầy đàn: 'a herd of cattle' (một đàn gia súc trâu bò lớn gặm cỏ). Chọn A." },
+                    { id: "4_15", q: "You should explain _________ for everyone.", options: ["clearly", "clear", "clearer", "clearest"], answer: "clearly", type: "mcq", exp: "Explain là động từ thường nên cần bổ trợ bởi một trạng từ gốc ở dạng chỉ cách thức: 'clearly'. Chọn A." },
+                    { id: "4_16", q: "Life in the village is _________.", options: ["peace", "peacefully", "peaceful", "more peacefully"], answer: "peaceful", type: "mcq", exp: "Đứng sau động từ tobe 'is' để miêu tả đặc tính của chủ ngữ danh từ là tính từ 'peaceful' (yên bình). Chọn C." },
+                    { id: "4_17", q: "A boat is _______ than a plane.", options: ["slower", "slowest", "more slow", "more slower"], answer: "slower", type: "mcq", exp: "Slow là tính từ ngắn một âm tiết, so sánh hơn thêm đuôi '-er' thành 'slower'. Chọn A." },
+                    { id: "4_18", q: "My sister dances _______ than me.", options: ["gooder", "weller", "better", "more good"], answer: "better", type: "mcq", exp: "So sánh hơn cho động từ dances (trạng từ gốc là well), biến đổi đặc biệt thành 'better'. Không dùng gooder hay weller vì sai cấu trúc. Chọn C." },
+                    { id: "4_19", q: "This road is _______ than that road.", options: ["narrower", "narrow", "the most narrow", "more narrower"], answer: "narrower", type: "mcq", exp: "Narrow là tính từ hai âm tiết tận cùng đuôi '-ow', hoạt động so sánh giống như tính từ ngắn, thêm đuôi '-er' tạo thành 'narrower'. Chọn A." },
+                    { id: "4_20", q: "He drives _______ his brother.", options: ["more careful than", "more carefully", "more carefully than", "as careful as"], answer: "more carefully than", type: "mcq", exp: "Động từ 'drives' đòi hỏi dùng phó từ bổ nghĩa 'carefully'. So sánh hơn cần từ 'than' đằng sau đối tượng so sánh. Tạo thành 'more carefully than'. Chọn C." },
+                    { id: "4_21", q: "Things in the city are _______ than in the country.", options: ["moderner", "more moderner", "modern", "more modern"], answer: "more modern", type: "mcq", exp: "Modern là tính từ dài hai âm tiết thường. Dạng so sánh hơn của tính từ dài là 'more + modern'. Chọn D." },
+                    { id: "4_22", q: "The farmers are busy _________ their crops.", options: ["to harvest", "harvest", "harvesting", "harvested"], answer: "harvesting", type: "mcq", exp: "Cấu trúc ngữ pháp: 'be busy + V-ing' (bận rộn làm việc gì đó). Chọn C." },
+                    { id: "4_23", q: "I can hear what you are saying. Can you speak a bit . _________ ?", options: ["slower", "more slowly", "slow", "slowest"], answer: "more slowly", type: "mcq", exp: "Speak là động từ nên cần bổ trợ của trạng từ. Trạng từ dài 'slowly' được dùng ở dạng so sánh hơn 'more slowly' khi đưa ra một lời khuyên yêu cầu nhẹ nhàng lịch sự. Chọn B." },
+                    { id: "4_24", q: "Every afternoon they went to the park to ______ the ducks with their favorite food.", options: ["raise", "catch", "feed", "milk"], answer: "feed", type: "mcq", exp: "Hành động cung cấp thức ăn cho loài động vật gặm nhấm ăn uống tại ao hồ là 'feed the ducks' (cho vịt ăn). Chọn C." },
+                    { id: "4_25", q: "It's ______ when fruits are all ripe and local people ______ them in the orchard.", options: ["harvest time/ pick", "harvest/ choose", "life/ decide", "harvest time/ gather"], answer: "harvest time/ pick", type: "mcq", exp: "Khi hoa quả chín rộ ('ripe'), đó chính là mùa hái hoạch 'harvest time' và người làm sẽ thực hiện việc hái quả 'pick them'. Chọn A." }
+                ]
+            },
+            "ex4_p2": {
+                title: "Exercise 4 (Part 2: Q26-45): Best fits matching space",
+                desc: "Chọn đáp án tốt nhất để hoàn thành câu (Câu 26 - 45).",
+                questions: [
+                    { id: "4_26", q: "In those days when I was at high school, I often helped my parents to ______ crops at harvest time.", options: ["save", "gather", "collect", "all are correct"], answer: "all are correct", type: "mcq", exp: "Các động từ save crops (thu cất), gather crops (gặt hái thu lượm), collect crops đều đúng ngữ nghĩa trong bối cảnh nông thôn vụ mùa. Chọn D." },
+                    { id: "4_27", q: "When I was a boy, my granddad used to ______ fish from the pond behind his house.", options: ["hold", "pick", "catch", "feed"], answer: "catch", type: "mcq", exp: "Cụm từ đi liền chỉ hành vi câu cá, giăng lưới bắt cá dưới ao hồ là 'catch fish'. Chọn C." },
+                    { id: "4_28", q: "After cutting rice from the field, farmers ______ it in the sun for 2 or 3 days.", options: ["drain", "bake", "dry", "plough"], answer: "dry", type: "mcq", exp: "Gặt lúa xong nông dân sẽ phơi khô thóc lúa ngoài nắng ráo: 'dry it in the sun'. Chọn C." },
+                    { id: "4_29", q: "Duong Lam is one of __________ ancient villages in Ha Noi.", options: ["the most", "more", "most", "the more"], answer: "the most", type: "mcq", exp: "Cấu trúc so sánh nhất cho tính từ dài: 'one of the + most + adj dài'. Ancient là tính từ cổ kính, cổ xưa. Chọn A.", isSpecialSign: true },
+                    { id: "4_30", q: "Farmers in this village use a _________ to harvest their rice.", options: ["cow", "truck", "buffalo", "combine harvester"], answer: "combine harvester", type: "mcq", exp: "Máy gặt đập liên hợp là 'combine harvester' - thiết bị cơ giới hiện đại giúp nông dân đẩy nhanh thu hoạch ruộng lúa cực kỳ hiệu quả. Chọn D.", isPhoneChat: true },
+                    { id: "4_31", q: "It is _______ in the city than it is in the country.", options: ["noisily", "more noisier", "noisier", "noisy"], answer: "noisier", type: "mcq", exp: "Noisy là tính từ ngắn (2 âm tiết kết thúc bằng y dài), khi so sánh hơn ta chuyển y thành i ngắn rồi thêm '-er' tạo thành 'noisier'. Loại B vì lặp từ so sánh thừa. Chọn C." },
+                    { id: "4_32", q: "The English test was _______ than I thought it would be.", options: ["the easier", "more easy", "easiest", "easier"], answer: "easier", type: "mcq", exp: "Easy là tính từ 2 âm tiết kết thúc đuôi '-y' chuyển thành 'easier' trong câu so sánh hơn có 'than'. Chọn D." },
+                    { id: "4_33", q: "English is thought to be _______ than Math.", options: ["harder", "the more hard", "hardest", "the hardest"], answer: "harder", type: "mcq", exp: "Hard là tính từ ngắn 1 âm tiết, dạng so sánh hơn thêm đuôi '-er' tạo thành 'harder'. Chọn A." },
+                    { id: "4_34", q: "Her office is _______ away than mine.", options: ["father", "more far", "farther", "farer"], answer: "farther", type: "mcq", exp: "Far là tính từ có dạng so sánh hơn bất quy tắc biểu hiện khoảng cách vật lý là 'farther'. Tránh nhầm lẫn với 'father' nghĩa là người bố. Chọn C." },
+                    { id: "4_35", q: "The streets in cities are _______ than those in the countryside.", options: ["crowded", "more crowded", "crowdeder", "less crowded"], answer: "more crowded", type: "mcq", exp: "Crowded là tính từ dài kết thúc bằng đuôi '-ed', dạng so sánh hơn là 'more crowded' (đông đúc hơn). Chọn B." },
+                    { id: "4_36", q: "People use a truck to _________ rice to home.", options: ["load", "unload", "unloading", "loading"], answer: "load", type: "mcq", exp: "Đứng sau cụm từ mục đích 'to' là một động từ nguyên thể 'load' (chất, xếp gạo mang về nhà). Chọn A." },
+                    { id: "4_37", q: "Do you want to _________ cow on the farm?", options: ["drink", "milk", "plough", "dry"], answer: "milk", type: "mcq", exp: "Vắt sữa bò là cụm động từ 'milk cow' vô cùng phổ biến tại trang trại chăn nuôi. Chọn B." },
+                    { id: "4_38", q: "Farmers in Ly Nhon are ________ in the yard after they have harvested all the fields.", options: ["drying rice", "washing clothes", "dragon-snake", "milk cows"], answer: "drying rice", type: "mcq", exp: "Công việc nông nghiệp sau khi gặt lúa mang về đầy sân gạch là phơi lúa 'drying rice'. Chọn A." },
+                    { id: "4_39", q: "Can Gio is a suitable place to plant ________ suitable for saline soils.", options: ["cattle", "villagers", "orchards", "cows"], options: ["cattle", "villagers", "orchards", "cows"], answer: "orchards", type: "mcq", exp: "Động từ 'plant' (trồng trọt cây trái) đòi hỏi danh từ tương thích thực vật là 'orchards' (vườn cây quả). Trâu bò hay dân làng không thể đem gieo trồng dưới lòng đất. Chọn C." },
+                    { id: "4_40", q: "At the weekend, my family and I went to the countryside to visit our grandparents. On the way, we encountered many houses with ________ architecture.", options: ["ancient", "disturbing", "vast", "envious"], answer: "ancient", type: "mcq", exp: "Vùng nông thôn thanh bình luôn có các ngôi nhà mang kiến trúc cổ kính lâu đời: 'ancient architecture'. Chọn A." },
+                    { id: "4_41", q: "The experience of ________ cows at Long Thanh dairy farm is a very memorable memory from my travels.", options: ["herding", "envying", "catching", "milking"], answer: "milking", type: "mcq", exp: "Tại nông trang sữa (dairy farm) thì hoạt động đặc trưng trải nghiệm thú vị nhất là vắt sữa bò 'milking cows'. Chọn D." },
+                    { id: "4_42", q: "We really enjoyed flying kites over the green rice ________ during our picnic last year.", options: ["facilities", "hays", "fields", "collections"], answer: "fields", type: "mcq", exp: "Địa điểm lộng gió lý tưởng để thả diều bay bổng là trên những cánh đồng lúa xanh ngát: 'rice fields'. Chọn C." },
+                    { id: "4_43", q: "This village is famous _________ picturesque landscape.", options: ["on", "at", "for", "about"], answer: "for", type: "mcq", exp: "Cấu trúc tính chất: 'be famous for something' (nổi tiếng về đặc điểm, sản vật nào đó). Chọn C." },
+                    { id: "4_44", q: "My grandmother loves _________ in the countryside.", options: ["live", "to live", "lived", "to living"], answer: "to live", type: "mcq", exp: "Động từ chỉ ý thích 'love' đi cùng với động từ nguyên thể có to: 'love to live'. Chọn B." },
+                    { id: "4_45", q: "How long will it take to ______ these bunches of rice onto the lorry?", options: ["cut", "fill", "load", "unload"], answer: "load", type: "mcq", exp: "Hành động di chuyển các bó lúa thóc sắp xếp lên sàn thùng xe tải thồ chở đi dùng động từ bốc xếp: 'load onto'. Chọn C." }
+                ]
+            },
+            "ex4_p3": {
+                title: "Exercise 4 (Part 3: Q46-65): Best fits matching space",
+                desc: "Chọn đáp án tốt nhất để hoàn thành câu (Câu 46 - 65).",
+                questions: [
+                    { id: "4_46", q: "The ______ is so peaceful with boys ______ the buffaloes on the slopes of the hill.", options: ["village/ guiding", "countryside/ herding", "paddy field/ leading", "life/ catching"], answer: "countryside/ herding", type: "mcq", exp: "Không gian sườn đồi bao la thuộc về nông thôn 'countryside' và hoạt động của các mục đồng dắt trâu gặm cỏ là 'herding buffaloes'. Chọn B." },
+                    { id: "4_47", q: "My grandmother was a peasant; she used to ______ rice from the buffalo-drawn cart.", options: ["carry", "load", "unload", "collect"], answer: "unload", type: "mcq", exp: "Lấy các bao lúa từ trên xe kéo dọn xuống bãi đất kho chứa là dỡ hàng xuống: 'unload rice from'. Chọn C." },
+                    { id: "4_48", q: "After ______ the field, farmers grow some kinds of important ______ suitable for each season.", options: ["combining/ cattle", "collecting/ poultry", "ploughing/ crops", "cultivating/ harvest"], answer: "ploughing/ crops", type: "mcq", exp: "Hành động cày xới nát đất ruộng gieo cấy vụ mùa mới là 'ploughing' và các loại nông sản gieo trồng gọi chung là hoa màu, cây trồng 'crops'. Chọn C." },
+                    { id: "4_49", q: "I heard the clank of buckets as they went to ______ the cows.", options: ["herd", "keep", "feed", "milk"], answer: "milk", type: "mcq", exp: "Nghe tiếng xô sắt va chạm leng keng chuẩn bị cho việc hứng vắt dòng sữa bò sữa ngọt ngào: 'milk the cows'. Chọn D." },
+                    { id: "4_50", q: "There are a lot of bamboo trees _________ her house.", options: ["around", "at", "for", "on"], answer: "around", type: "mcq", exp: "Những lũy tre mọc xanh rì bao bọc xung quanh khuôn viên ngôi nhà nhỏ: 'around her house'. Chọn A." },
+                    { id: "4_51", q: "She couldn't get the first prize because she ran _________ than Mai.", options: ["slower", "slowly", "more slowly", "slowest"], answer: "more slowly", type: "mcq", exp: "Ran là động từ thường nên bổ ngữ bằng trạng từ 'slowly'. Có từ so sánh 'than' nên dùng 'more slowly'. Chọn C." },
+                    { id: "4_52", q: "City drivers have to drive _______ than country ones.", options: ["more careful", "more careless", "more carefully", "more carelessly"], answer: "more carefully", type: "mcq", exp: "Lái xe là động từ thường 'drive', do đó cần trạng từ chỉ phong thái cẩn thận 'carefully'. Ở thành phố giao thông phức tạp đòi hỏi lái xe an toàn hơn nên chọn 'more carefully'. Chọn C." },
+                    { id: "4_53", q: "My house is _______ hers.", options: ["cheap than", "cheaper", "more cheap than", "cheaper than"], answer: "cheaper than", type: "mcq", exp: "Cheap là tính từ ngắn, dạng so sánh hơn thêm đuôi '-er' đi kèm từ 'than' tạo thành 'cheaper than'. Chọn D." },
+                    { id: "4_54", q: "Tom is _______ than David.", options: ["handsome", "the more handsome", "more handsome", "the most handsome"], answer: "more handsome", type: "mcq", exp: "Handsome là tính từ dài, so sánh hơn là 'more handsome'. Chọn C." },
+                    { id: "4_55", q: "He did the test _______ I did.", options: ["as bad as", "badder than", "more badly than", "worse than"], answer: "worse than", type: "mcq", exp: "Did là động từ thường bổ nghĩa bằng phó từ 'badly'. Phó từ so sánh hơn bất quy tắc biến đổi đặc biệt thành 'worse than'. Chọn D." },
+                    { id: "4_56", q: "My new sofa is _______ than the old one.", options: ["more comfortable", "comfortably", "more comfortabler", "comfortable"], answer: "more comfortable", type: "mcq", exp: "Comfortable là tính từ dài có 4 âm tiết gõ phím bổ nghĩa cho chủ ngữ ghế sofa mới, so sánh hơn dùng 'more comfortable'. Chọn A." },
+                    { id: "4_57", q: "He walked _________ home after a long working day.", options: ["tire", "tiredness", "tired", "tiredly"], answer: "tiredly", type: "mcq", exp: "Hành động di chuyển những bước đi uể oải về nhà cần bổ nghĩa bởi phó từ 'tiredly' (một cách mệt mỏi). Chọn D." },
+                    { id: "4_58", q: "You can travel _________ in the city than in the countryside.", options: ["convenient", "conveniently", "more convenient", "more conveniently"], answer: "more conveniently", type: "mcq", exp: "Động từ di chuyển đi lại 'travel' yêu cầu phó từ 'conveniently'. So sánh hơn của phó từ dài là 'more conveniently'. Chọn D." },
+                    { id: "4_59", q: "We are looking forward to a bumper _______.", options: ["lighthouse", "village", "countryside", "crop"], answer: "crop", type: "mcq", exp: "Cụm danh từ ghép cố định trong nông nghiệp: 'a bumper crop' (một vụ mùa bội thu, năng suất cực cao hoa màu). Chọn D." },
+                    { id: "4_60", q: "I used to go _______ buffaloes when I was small.", options: ["herding", "swimming", "hiking", "cooking"], answer: "herding", type: "mcq", exp: "Hoạt động truyền thống của mục đồng chăn trâu cắt cỏ là 'go herding buffaloes'. Chọn A." },
+                    { id: "4_61", q: "They _______ the boxes into the trucks.", options: ["harvested", "loaded", "caught", "observed"], answer: "loaded", type: "mcq", exp: "Hành động bốc dỡ các thùng hộp cồng kềnh chất xếp gọn gàng vào trong xe tải để chuyển chở đi là 'loaded'. Chọn B." },
+                    { id: "4_62", q: "_______ is often the hardest but the most important time to people living in the countryside.", options: ["Tet holiday", "Harvest time", "Daylight", "Travelling time"], answer: "Harvest time", options: ["Tet holiday", "Harvest time", "Daylight", "Travelling time"], answer: "Harvest time", type: "mcq", exp: "Mùa gặt, thời điểm thu hoạch vụ lúa ('harvest time') nông dân phải làm việc quần quật suốt ngày đêm để kịp tiến độ thời tiết nên đây là mùa bận rộn nhất. Chọn B." },
+                    { id: "4_63", q: "John invited Ann to join his family on _______ to his home village about 60 kilometers to the north of Ha Noi.", options: ["a two-day trip", "two- days trip", "a two- days trip", "a trip two days"], answer: "a two-day trip", type: "mcq", exp: "Ngữ pháp tính từ ghép chỉ khoảng thời gian đóng vai trò bổ nghĩa: 'a + số đếm - danh từ số ít gạch nối + danh từ chính'. Do đó viết đúng là 'a two-day trip' (không có 's' ở day). Chọn A." },
+                    { id: "4_64", q: "Students in this school study _________ than students in that school.", options: ["more hardly", "harder", "hard", "hardly"], answer: "harder", type: "mcq", exp: "Hard vừa là tính từ vừa là phó từ ngắn đặc biệt. Khi so sánh hơn ta thêm trực tiếp đuôi '-er' tạo thành 'harder'. 'Hardly' mang nghĩa hoàn toàn khác là 'hầu như không'. Chọn B." },
+                    { id: "4_65", q: "In my family, my father cooks _________ than my mother does.", options: ["better", "best", "well", "good"], answer: "better", type: "mcq", exp: "Nấu ăn ngon hơn so với mẹ, dùng phó từ so sánh hơn bất quy tắc biến đổi của 'well' thành 'better'. Chọn A." }
+                ]
+            },
+            "ex5": {
+                title: "Exercise 5: Fill in the blanks with the comparative form of the adverbs",
+                desc: "Bấm vào chỗ trống màu vàng và chọn dạng so sánh hơn chính xác của các trạng từ trong ngoặc.",
+                questions: [
+                    { id: "5_1", q: "My aunt sings [well] than my uncle does.", choices: ["better", "well", "more well", "worse"], answer: "better", type: "gapfill", exp: "Trạng từ 'well' chuyển đổi bất quy tắc thành 'better' trong cấu trúc so sánh hơn." },
+                    { id: "5_2", q: "She cooks [badly] than her sister. I couldn't eat what she cooked.", choices: ["worse", "badly", "more badly", "better"], answer: "worse", type: "gapfill", exp: "Trạng từ 'badly' chuyển đổi bất quy tắc thành 'worse' trong cấu trúc so sánh hơn." },
+                    { id: "5_3", q: "No one in the team runs [fast] than Linh.", choices: ["faster", "fast", "more fast", "fastest"], answer: "faster", type: "gapfill", exp: "Trạng từ ngắn 'fast' thêm đuôi '-er' thành 'faster'." },
+                    { id: "5_4", q: "He drives [carefully] than his father.", choices: ["more carefully", "carefully", "carefuler", "less carefully"], answer: "more carefully", type: "gapfill", exp: "Trạng từ dài 'carefully' dùng 'more + carefully' trong so sánh hơn." },
+                    { id: "5_5", q: "Yesterday my teacher came to class [early] than usual.", choices: ["earlier", "early", "more early", "earliest"], answer: "earlier", type: "gapfill", exp: "Trạng từ 'early' có 2 âm tiết kết thúc bằng 'y' biến đổi thành i ngắn rồi thêm đuôi '-er' tạo thành 'earlier'." },
+                    { id: "5_6", q: "I speak English [fluently] than my sister.", choices: ["more fluently", "fluently", "fluentlier", "most fluently"], answer: "more fluently", type: "gapfill", exp: "Trạng từ dài 'fluently' so sánh hơn sử dụng cấu trúc 'more + fluently'." },
+                    { id: "5_7", q: "She coloured the picture [perfectly] than I expected.", choices: ["more perfectly", "perfectly", "perfectlier", "most perfectly"], answer: "more perfectly", type: "gapfill", exp: "Perfectly là trạng từ dài, so sánh hơn là 'more perfectly'." },
+                    { id: "5_8", q: "The little child talked to his grandmother [politely] than other children.", choices: ["more politely", "politely", "politelier", "less politely"], answer: "more politely", type: "gapfill", exp: "Politely là trạng từ dài, so sánh hơn là 'more politely'." },
+                    { id: "5_9", q: "She painted the picture [beautifully] than I did.", choices: ["more beautifully", "beautifully", "beautifullier", "better beautifully"], answer: "more beautifully", type: "gapfill", exp: "Beautifully là trạng từ dài, so sánh hơn sử dụng 'more beautifully'." },
+                    { id: "5_10", q: "Nam runs [quickly] than other members of the team.", choices: ["more quickly", "quickly", "quicklier", "faster"], answer: "more quickly", type: "gapfill", exp: "Quickly là trạng từ dài, so sánh hơn sử dụng 'more quickly'." }
+                ]
+            },
+            "ex6": {
+                title: "Exercise 6: Match the pictures with correct words/phrases",
+                desc: "Hãy bấm nút ghép từ thích hợp cho từng bức tranh đồ họa sinh động vẽ bằng SVG dưới đây:",
+                questions: [
+                    { id: "6_1", label: "Hình 1", choices: ["drying rice", "picking fruits", "buffalo", "combine harvester", "paddy fields", "small village", "milking cow"], answer: "combine harvester", graphic: "combine_harvester", type: "matching", exp: "Hình ảnh phác họa thiết bị máy gặt đập liên hợp gặt lúa trên đồng ruộng: 'combine harvester'." },
+                    { id: "6_2", label: "Hình 2", choices: ["drying rice", "picking fruits", "buffalo", "combine harvester", "paddy fields", "small village", "milking cow"], answer: "buffalo", graphic: "buffalo", type: "matching", exp: "Hình ảnh phác họa chú trâu xám sừng cong thân thuộc của làng quê Việt Nam: 'buffalo'." },
+                    { id: "6_3", label: "Hình 3", choices: ["drying rice", "picking fruits", "buffalo", "combine harvester", "paddy fields", "small village", "milking cow"], answer: "drying_rice", graphic: "drying_rice", type: "matching", exp: "Hình ảnh phác họa hạt thóc vàng óng ả được phơi dưới nắng ấm: 'drying rice'." },
+                    { id: "6_4", label: "Hình 4", choices: ["drying rice", "picking fruits", "buffalo", "combine harvester", "paddy fields", "small village", "milking cow"], answer: "paddy fields", graphic: "paddy_fields", type: "matching", exp: "Hình ảnh những ô ruộng mạ xanh non, ruộng bậc thang tuyệt đẹp: 'paddy fields'." },
+                    { id: "6_5", label: "Hình 5", choices: ["drying rice", "picking fruits", "buffalo", "combine harvester", "paddy fields", "small village", "milking cow"], answer: "picking fruits", graphic: "picking_fruits", type: "matching", exp: "Hình ảnh giỏ trái cây tươi ngon cùng bàn tay thu hoạch trĩu cành: 'picking fruits'." },
+                    { id: "6_6", label: "Hình 6", choices: ["drying rice", "picking fruits", "buffalo", "combine harvester", "paddy fields", "small village", "milking cow"], answer: "milking cow", graphic: "milking_cow", type: "matching", exp: "Hình ảnh chú bò sữa đáng yêu và xô sữa tươi vừa vắt ngọt lành: 'milking cow'." },
+                    { id: "6_7", label: "Hình 7", choices: ["drying rice", "picking fruits", "buffalo", "combine harvester", "paddy fields", "small village", "milking cow"], answer: "small village", graphic: "small_village", type: "matching", exp: "Hình ảnh làng quê với mái ngói đỏ mộc mạc yên bình: 'small village'." }
+                ]
+            },
+            "ex7": {
+                title: "Exercise 7: Closest meaning to the underlined word",
+                desc: "Chọn từ/cụm từ có ý nghĩa GẦN NHẤT (Đồng nghĩa) với từ được gạch chân dưới đây:",
+                questions: [
+                    { id: "7_1", q: "Nomadic people live in a <u>ger</u>. It keeps them cool in summer and warm in winter.", options: ["house", "circular tent", "cave", "yatch"], answer: "circular tent", type: "mcq", exp: "Ger là tên gọi lều tròn truyền thống được căng bọc nỉ da ấm áp di động của dân du mục, đồng nghĩa sát nhất với 'circular tent'. Chọn B." },
+                    { id: "7_2", q: "The nomads move two or three times a year to look for new <u>pastures</u>.", options: ["food", "places", "grasslands", "lifestyles"], answer: "grasslands", type: "mcq", exp: "Pasture nghĩa là bãi chăn thả gia súc béo tốt, đồng nghĩa sát nhất là đồng cỏ tươi xanh 'grasslands'. Chọn C." },
+                    { id: "7_3", q: "Life in the city is more <u>exciting</u> than in the country.", options: ["boring", "interesting", "convenient", "beautiful"], answer: "interesting", type: "mcq", exp: "Exciting là hào hứng, sôi nổi rộn rã, đồng nghĩa sát nhất với 'interesting' (thú vị, hấp dẫn). Chọn B." },
+                    { id: "7_4", q: "That village is very <u>peaceful</u>, so we like to live there.", options: ["noisy", "quiet", "boring", "skillful"], answer: "quiet", type: "mcq", exp: "Peaceful mang ý nghĩa thanh bình yên ả, tĩnh lặng, đồng nghĩa sát nhất với từ 'quiet' (yên tĩnh). Chọn B." },
+                    { id: "7_5", q: "I <u>don’t like</u> living in the country.", options: ["dislike", "hate", "enjoy", "A and B are correct"], answer: "A and B are correct", type: "mcq", exp: "Don't like biểu đạt sự không thích, có thể tương đồng với 'dislike' (không ưa) và 'hate' (ghét). Nên cả A và B đều đúng. Chọn D." }
+                ]
+            },
+            "ex8": {
+                title: "Exercise 8: Opposite meaning to the underlined word",
+                desc: "Chọn từ/cụm từ có ý nghĩa TRÁI NGƯỢC NHẤT (Trái nghĩa) với từ được gạch chân dưới đây:",
+                questions: [
+                    { id: "8_1", q: "The life in the countryside is very <u>quiet</u> and relaxing.", options: ["noisy", "exciting", "modern", "hard"], answer: "noisy", type: "mcq", exp: "Quiet nghĩa là yên tĩnh tĩnh mịch. Trái nghĩa trực tiếp của nó là ồn ào nhốn nháo còi xe 'noisy'. Chọn A." },
+                    { id: "8_2", q: "City people seem to react more <u>quickly</u> to changes than country people.", options: ["noisy", "slow", "slowly", "fast"], answer: "slowly", type: "mcq", exp: "Quickly là trạng từ di chuyển nhanh chóng nhạy bén. Trạng từ trái nghĩa của nó là một cách chậm chạp 'slowly'. Chọn C." },
+                    { id: "8_3", q: "A buffalo ploughs <u>better</u> than a horse.", options: ["well", "bad", "badly", "worse"], answer: "worse", type: "mcq", exp: "Better là so sánh hơn của tốt (well). Trạng từ so sánh hơn trái nghĩa (kém hơn, tệ hơn) là 'worse'. Chọn D." },
+                    { id: "8_4", q: "This exercise is more <u>difficult</u> than that one.", options: ["easy", "boring", "good", "easily"], answer: "easy", type: "mcq", exp: "Difficult là tính từ khó nhằn. Tính từ trái nghĩa trực tiếp với nó là dễ dàng 'easy'. Chọn A." },
+                    { id: "8_5", q: "Life in the city is <u>more convenient</u> and exciting than life in the country.", options: ["inconvenient", "more inconvenient", "slow", "A and B are correct"], answer: "more inconvenient", type: "mcq", exp: "Cụm so sánh hơn 'more convenient' (tiện lợi hơn). Dạng so sánh hơn trái nghĩa tương ứng là bất tiện hơn: 'more inconvenient'. Chọn B." }
+                ]
+            },
+            "ex9": {
+                title: "Exercise 9: Write comparative form of the adverbs",
+                desc: "Bấm chọn chính xác dạng so sánh hơn của các trạng từ cho trước:",
+                questions: [
+                    { id: "9_1", q: "Dạng so sánh hơn của trạng từ: <strong>beautifully</strong>", options: ["more beautifully", "beautifullier", "beautiful", "most beautifully"], answer: "more beautifully", type: "mcq", exp: "Beautifully là trạng từ dài, so sánh hơn sử dụng 'more beautifully'." },
+                    { id: "9_2", q: "Dạng so sánh hơn của trạng từ: <strong>well</strong>", options: ["better", "worse", "weller", "more well"], answer: "better", type: "mcq", exp: "Well là trạng từ đặc biệt biến đổi bất quy tắc thành 'better' trong so sánh hơn." },
+                    { id: "9_3", q: "Dạng so sánh hơn của trạng từ: <strong>hard</strong>", options: ["harder", "more hard", "hardly", "hardest"], answer: "harder", type: "mcq", exp: "Hard vừa là tính từ vừa là trạng từ ngắn đặc biệt, so sánh hơn thêm đuôi '-er' thành 'harder'." },
+                    { id: "9_4", q: "Dạng so sánh hơn của trạng từ: <strong>quickly</strong>", options: ["more quickly", "quicklier", "quicklyer", "quicker"], answer: "more quickly", type: "mcq", exp: "Quickly là trạng từ dài, dạng so sánh hơn chuẩn xác học thuật là 'more quickly'." },
+                    { id: "9_5", q: "Dạng so sánh hơn của trạng từ: <strong>heavily</strong>", options: ["more heavily", "heavilier", "heavilyer", "less heavily"], answer: "more heavily", type: "mcq", exp: "Heavily là trạng từ dài, so sánh hơn sử dụng 'more heavily'." },
+                    { id: "9_6", q: "Dạng so sánh hơn của trạng từ: <strong>fast</strong>", options: ["faster", "more fast", "fastest", "fastly"], answer: "faster", type: "mcq", exp: "Fast là trạng từ ngắn đặc biệt, dạng so sánh hơn thêm đuôi '-er' thành 'faster'." },
+                    { id: "9_7", q: "Dạng so sánh hơn của trạng từ: <strong>easily</strong>", options: ["more easily", "easier", "easilier", "most easily"], answer: "more easily", type: "mcq", exp: "Easily là trạng từ dài nên dạng so sánh hơn chuẩn mực là 'more easily'." },
+                    { id: "9_8", q: "Dạng so sánh hơn của trạng từ: <strong>safely</strong>", options: ["more safely", "safelier", "safelyer", "safer"], answer: "more safely", type: "mcq", exp: "Safely là trạng từ dài, so sánh hơn sử dụng 'more safely'." },
+                    { id: "9_9", q: "Dạng so sánh hơn của trạng từ: <strong>badly</strong>", options: ["worse", "badder", "more badly", "baddest"], answer: "worse", type: "mcq", exp: "Badly biến đổi bất quy tắc thành 'worse' trong so sánh hơn." },
+                    { id: "9_10", q: "Dạng so sánh hơn của trạng từ: <strong>quietly</strong>", options: ["more quietly", "quietlier", "quietlyer", "quieter"], answer: "more quietly", type: "mcq", exp: "Quietly là trạng từ dài, so sánh hơn là 'more quietly'." }
+                ]
+            },
+            "ex10": {
+                title: "Exercise 10: Circle the correct options",
+                desc: "Lựa chọn đáp án chính xác trong ngoặc để hoàn chỉnh ngữ nghĩa của các câu dưới đây:",
+                questions: [
+                    { id: "10_1", q: "Peter spoke English (good / better / well) than the other students.", options: ["good", "better", "well"], answer: "better", type: "mcq", exp: "Có từ 'than' ở dạng so sánh hơn nên sử dụng tính chất so sánh hơn biến đổi bất quy tắc của well là 'better'." },
+                    { id: "10_2", q: "Juice contains (more / many) vitamins than coke.", options: ["more", "many"], answer: "more", type: "mcq", exp: "Vitamins than coke là so sánh hơn của danh từ đếm được số nhiều nên dùng 'more + N + than'. Chọn A." },
+                    { id: "10_3", q: "Please write your personal information (carefully / careful / carelessly) so we can contact you.", options: ["carefully", "careful", "carelessly"], answer: "carefully", type: "mcq", exp: "Write là động từ thường nên dùng trạng từ bổ nghĩa. Để liên lạc chính xác cần viết cẩn thận, chọn trạng từ tích cực 'carefully'." },
+                    { id: "10_4", q: "Nick can jump (higher / more high) than Mike.", options: ["higher", "more high"], answer: "higher", type: "mcq", exp: "High là tính từ và trạng từ ngắn, so sánh hơn thêm '-er' tạo thành 'higher'." },
+                    { id: "10_5", q: "His team lost the football match because they played (badly / bad / worse) than our team.", options: ["badly", "bad", "worse"], answer: "worse", type: "mcq", exp: "Có từ 'than' so sánh hơn, trạng từ so sánh hơn biến đổi của badly là 'worse'." },
+                    { id: "10_6", q: "Ms. Sarah dances (more beautifully / beautifully) than Ms. Susan.", options: ["more beautifully", "beautifully"], answer: "more beautifully", type: "mcq", exp: "So sánh hơn có từ 'than', vũ đạo dances là động từ thường nên dùng trạng từ so sánh hơn 'more beautifully'." },
+                    { id: "10_7", q: "A villager greeted me (polite/ politely/ more politely) than other people.", options: ["polite", "politely", "more politely"], answer: "more politely", type: "mcq", exp: "Chào đón là hành động 'greeted', so sánh hơn với người khác qua từ 'than' bắt buộc dùng trạng từ ghép 'more politely'." },
+                    { id: "10_8", q: "Does a computer work at calculus (more fast / faster) than a human?", options: ["more fast", "faster"], answer: "faster", type: "mcq", exp: "Fast là trạng từ ngắn đặc biệt, so sánh hơn thêm đuôi '-er' thành 'faster'." },
+                    { id: "10_9", q: "This girl dances (gracefully / more gracefully / graceful) than other girls.", options: ["gracefully", "more gracefully", "graceful"], answer: "more gracefully", type: "mcq", exp: "Dances là động từ thường, so sánh hơn có 'than' nên dùng trạng từ so sánh hơn 'more gracefully'." },
+                    { id: "10_10", q: "City people seem to react (quicklier / more quickly) to changes than countryside people.", options: ["quicklier", "more quickly"], answer: "more quickly", type: "mcq", exp: "React là động từ thường bổ nghĩa bằng trạng từ dài 'quickly', so sánh hơn dùng phó từ dài chính quy 'more quickly'." },
+                    { id: "10_11", q: "Jim tries his best to run (fast / faster / fastly) to catch the ball in the match.", options: ["fast", "faster", "fastly"], answer: "fast", type: "mcq", exp: "Để bắt được quả bóng Jim cố gắng hết sức để chạy nhanh ('run fast'). Ở đây không xuất hiện đối tượng so sánh trực diện để chia ở so sánh hơn. Chọn A." },
+                    { id: "10_12", q: "People in rural areas talk (optimistically / more optimistically) than city people.", options: ["optimistically", "more optimistically"], answer: "more optimistically", type: "mcq", exp: "Có từ 'than' so sánh hơn, động từ thường 'talk' dùng trạng từ so sánh hơn 'more optimistically'." },
+                    { id: "10_13", q: "Nga writes English essays (better / more well) than Mai.", options: ["better", "more well"], answer: "better", type: "mcq", exp: "Viết luận văn 'writes' tốt hơn, dạng so sánh hơn bất quy tắc của phó từ well là 'better'. Chọn A." },
+                    { id: "10_14", q: "The man sitting in the third table worked (harder / hard / hardly) than the other students.", options: ["harder", "hard", "hardly"], answer: "harder", type: "mcq", exp: "Có từ 'than' so sánh hơn, trạng từ làm việc chăm chỉ là hard chuyển thành 'harder'. Hardly mang nghĩa phủ định 'hầu như không' hoàn toàn sai ngữ cảnh." },
+                    { id: "10_15", q: "The farmers in my village work (hard / harder) than the ones here.", options: ["hard", "harder"], answer: "harder", type: "mcq", exp: "Có từ 'than' so sánh hơn, động từ 'work' bổ trợ bằng trạng từ so sánh hơn 'harder'." },
+                    { id: "10_16", q: "You should have your breakfast (quick / quickly / quicker), or you will be late for school.", options: ["quick", "quickly", "quicker"], answer: "quickly", type: "mcq", exp: "Dùng phó từ bổ trợ hành động ăn sáng 'have breakfast' là 'quickly' (một cách nhanh chóng). Chọn B." },
+                    { id: "10_17", q: "She came to the party (later / more lately) than her friends.", options: ["later", "more lately"], answer: "later", type: "mcq", exp: "Đến muộn hơn bạn bè, dạng so sánh hơn của trạng từ chỉ thời gian 'late' là 'later'." },
+                    { id: "10_18", q: "Today it’s raining (more heavily / heavilier) than it was yesterday.", options: ["more heavily", "heavilier"], answer: "more heavily", type: "mcq", exp: "Trời mưa 'raining' tầm tã to hạt hơn, trạng từ dài 'heavily' dùng so sánh hơn 'more heavily'. Chọn A." }
+                ]
+            },
+            "ex11": {
+                title: "Exercise 11: Choose correct words to complete the sentences",
+                desc: "Sử dụng các từ cho trước để điền vào chỗ trống thích hợp: <strong>more perfectly, higher, more quickly, kinder, correctly, harder, earlier, more clearly</strong>",
+                questions: [
+                    { id: "11_1", q: "Planes can fly _______ than birds.", options: ["more perfectly", "higher", "more quickly", "kinder", "correctly", "harder", "earlier", "more clearly"], answer: "higher", type: "mcq", exp: "Máy bay có thể bay cao ('fly higher') hơn các loài chim nhỏ." },
+                    { id: "11_2", q: "I can't understand what you wrote. Please write _______ in this form.", options: ["more perfectly", "higher", "more quickly", "kinder", "correctly", "harder", "earlier", "more clearly"], answer: "more clearly", type: "mcq", exp: "Không thể đọc nổi chữ của con, con vui lòng viết rõ ràng hơn 'write more clearly'." },
+                    { id: "11_3", q: "No one is _______ than my mother.", options: ["more perfectly", "higher", "more quickly", "kinder", "correctly", "harder", "earlier", "more clearly"], answer: "kinder", type: "mcq", exp: "Không ai có tấm lòng tốt bụng ôn hòa hơn mẹ của tôi: 'kinder than'." },
+                    { id: "11_4", q: "He needs to study _______ than usual before the exams if he wants to get good marks.", options: ["more perfectly", "higher", "more quickly", "kinder", "correctly", "harder", "earlier", "more clearly"], answer: "harder", type: "mcq", exp: "Trước kỳ thi cần học tập chăm chỉ và nỗ lực hơn bình thường: 'study harder than'." },
+                    { id: "11_5", q: "This film started _______ than that film.", options: ["more perfectly", "higher", "more quickly", "kinder", "correctly", "harder", "earlier", "more clearly"], answer: "earlier", type: "mcq", exp: "Bộ phim điện ảnh này bắt đầu trình chiếu sớm hơn bộ phim kia: 'started earlier than'." },
+                    { id: "11_6", q: "He finished the test _______ than the other students in class.", options: ["more perfectly", "higher", "more quickly", "kinder", "correctly", "harder", "earlier", "more clearly"], answer: "more quickly", type: "mcq", exp: "Anh ấy hoàn thành bài kiểm tra trắc nghiệm nhanh hơn các học sinh khác: 'more quickly than'." },
+                    { id: "11_7", q: "The team that answered the questions _______ is the winner.", options: ["more perfectly", "higher", "more quickly", "kinder", "correctly", "harder", "earlier", "more clearly"], answer: "correctly", type: "mcq", exp: "Đội ngũ đưa ra được các câu trả lời hoàn toàn chính xác ('correctly') chính là người giành chiến thắng chung cuộc." }
+                ]
+            },
+            "ex12": {
+                title: "Exercise 12: Complete sentences with comparative form of adverbs",
+                desc: "Chọn đáp án là dạng so sánh hơn của trạng từ có gốc từ tính từ trong ngoặc đơn.",
+                questions: [
+                    { id: "12_1", q: "My aunt sings _______ than my uncle does. (well)", options: ["better", "weller", "more well", "worse"], answer: "better", type: "mcq", exp: "Well biến đổi so sánh hơn bất quy tắc thành 'better'." },
+                    { id: "12_2", q: "This task can be completed _______ than that one. (easy)", options: ["easier", "more easily", "easilyer", "more easy"], answer: "more easily", type: "mcq", exp: "Trạng từ của easy là easily (trạng từ dài), dạng so sánh hơn là 'more easily'." },
+                    { id: "12_3", q: "She cooks _______ than her sister. I couldn't eat what she cooked. (badly)", options: ["badder", "more badly", "worse", "baddest"], answer: "worse", type: "mcq", exp: "Trạng từ badly biến đổi bất quy tắc so sánh hơn thành 'worse'." },
+                    { id: "12_4", q: "Time goes by _______ when we are busy. (quick)", options: ["quicker", "more quickly", "quicklyer", "quicklier"], answer: "more quickly", type: "mcq", exp: "Trạng từ của quick là quickly, dạng so sánh hơn của trạng từ dài là 'more quickly'." },
+                    { id: "12_5", q: "No one in the team runs _______ than Linh. (fast)", options: ["faster", "more fast", "fastlyer", "fastest"], answer: "faster", type: "mcq", exp: "Trạng từ ngắn fast thêm đuôi '-er' thành 'faster'." },
+                    { id: "12_6", q: "It usually rains _______ in Central Viet Nam than in other region. (heavy)", options: ["heavilier", "more heavily", "heavier", "more heavy"], answer: "more heavily", type: "mcq", exp: "Trạng từ của heavy là heavily, so sánh hơn của trạng từ dài là 'more heavily'." },
+                    { id: "12_7", q: "He drives _______ than his father. (carefully)", options: ["carefuler", "more carefully", "carefullyer", "less carefully"], answer: "more carefully", type: "mcq", exp: "Trạng từ dài carefully dùng cấu trúc 'more carefully'." },
+                    { id: "12_8", q: "Our family has lived _______ in the country than in the town since last year. (happy)", options: ["happier", "more happily", "happilyer", "more happy"], answer: "more happily", type: "mcq", exp: "Trạng từ của happy là happily, dạng so sánh hơn của trạng từ dài là 'more happily'." },
+                    { id: "12_9", q: "Yesterday my teacher came to class _______ than usual. (early)", options: ["earlier", "earlyer", "more early", "earliest"], answer: "earlier", type: "mcq", exp: "Early biến đổi y dài thành i ngắn rồi thêm '-er' tạo thành 'earlier'." },
+                    { id: "12_10", q: "I will have to try a bit _______ than this. (hard)", options: ["harder", "more hard", "hardly", "hardest"], answer: "harder", type: "mcq", exp: "Trạng từ ngắn hard thêm đuôi '-er' tạo thành 'harder'." },
+                    { id: "12_11", q: "I speak English _______ than my sister. (fluently)", options: ["more fluently", "fluentlyer", "fluentlier", "most fluently"], answer: "more fluently", type: "mcq", exp: "Trạng từ dài fluently dùng dạng so sánh hơn 'more fluently'." },
+                    { id: "12_12", q: "A tractor can plough _______ than a buffalo or a horse. (good)", options: ["gooder", "better", "weller", "more well"], answer: "better", type: "mcq", exp: "Tính từ 'good' có trạng từ tương ứng là 'well', dạng so sánh hơn biến đổi bất quy tắc thành 'better'." },
+                    { id: "12_13", q: "She coloured the picture _______ than I expected. (perfectly)", options: ["perfectlier", "more perfectly", "perfectlyer", "most perfectly"], answer: "more perfectly", type: "mcq", exp: "Trạng từ dài perfectly dùng dạng so sánh hơn 'more perfectly'." },
+                    { id: "12_14", q: "The hall was lighted _______ than the corridors. (bright)", options: ["brighter", "more brightly", "brightlyer", "brightest"], answer: "more brightly", type: "mcq", exp: "Trạng từ của bright là brightly, dạng so sánh hơn của trạng từ dài là 'more brightly'." },
+                    { id: "12_15", q: "The little child talked to his grandmother _______ than other children. (politely)", options: ["politelier", "more politely", "politelyer", "less politely"], answer: "more politely", type: "mcq", exp: "Trạng từ dài politely sử dụng dạng so sánh hơn 'more politely'." },
+                    { id: "12_16", q: "The boys were playing the game _______ than the girls. (noisy)", options: ["noisier", "more noisily", "noisilyer", "most noisily"], answer: "more noisily", type: "mcq", exp: "Trạng từ của noisy là noisily, dạng so sánh hơn của trạng từ dài là 'more noisily'." },
+                    { id: "12_17", q: "She painted the picture _______ than I did. (beautifully)", options: ["beautifullier", "more beautifully", "beautifullyer", "most beautifully"], answer: "more beautifully", type: "mcq", exp: "Trạng từ dài beautifully dùng cấu trúc so sánh hơn 'more beautifully'." },
+                    { id: "12_18", q: "Nam runs _______ than other members of the team. (quickly)", options: ["quicklier", "more quickly", "quicklyer", "faster"], answer: "more quickly", type: "mcq", exp: "Trạng từ dài quickly dùng cấu trúc so sánh hơn 'more quickly'." }
+                ]
+            },
+            "ex13": {
+                title: "Exercise 13: Find and correct one mistake in each sentence",
+                desc: "Tìm và bấm chọn vào phần gạch chân chứa lỗi sai ngữ pháp, sau đó cô sẽ chỉ cho con cách sửa:",
+                questions: [
+                    { id: "13_1", q: "To get <u>a</u> (A) good mark, you should listen more <u>careful</u> (B) than you <u>have done</u> (C).", options: ["a", "careful", "have done"], answer: "careful", type: "mcq", exp: "Lỗi sai tại 'careful'. Hành động nghe 'listen' là động từ thường nên ta phải dùng phó từ để bổ nghĩa. Sửa lỗi: careful => carefully." },
+                    { id: "13_2", q: "It is not <u>well</u> (A) for you <u>to spend</u> (B) too much time <u>surfing</u> (C) the internet a day.", options: ["well", "to spend", "surfing"], answer: "well", type: "mcq", exp: "Lỗi sai tại 'well'. Đứng sau cấu trúc liên kết tobe 'It is not...' ta cần một tính từ đóng vai trò vị ngữ. Sửa lỗi: well => good." },
+                    { id: "13_3", q: "After <u>harvesting</u> (A) the rice yesterday, we <u>loaded</u> (B) it <u>onto</u> (C) the truck home and <u>drying</u> (D) it.", options: ["harvesting", "loaded", "onto", "drying"], answer: "drying", type: "mcq", exp: "Lỗi sai ở 'drying'. Các hành động xảy ra liên tiếp trong quá khứ 'yesterday' (loaded... and dried...) phải chia đồng thì quá khứ đơn. Sửa lỗi: drying => dried." },
+                    { id: "13_4", q: "She is <u>crazy about</u> (A) <u>drink</u> (B) coffee when she <u>is working</u> (C) in <u>a cafe</u> (D).", options: ["crazy about", "drink", "is working", "a cafe"], answer: "drink", type: "mcq", exp: "Lỗi sai ở 'drink'. Đứng sau giới từ 'about' ta phải chia động từ dưới dạng danh động từ (V-ing). Sửa lỗi: drink => drinking." },
+                    { id: "13_5", q: "No one in my family works <u>hard</u> (A) than my mother. She <u>leaves</u> (B) home <u>in</u> (C) the early morning.", options: ["hard", "leaves", "in"], answer: "hard", type: "mcq", exp: "Lỗi sai tại 'hard'. Có từ so sánh 'than' nên phải dùng tính chất so sánh hơn của trạng từ. Sửa lỗi: hard => harder." },
+                    { id: "13_6", q: "We can <u>enjoy</u> (A) <u>freshing</u> (B) air and <u>vegetables</u> (C) when <u>living</u> (D) in the countryside.", options: ["enjoy", "freshing", "vegetables", "living"], answer: "freshing", type: "mcq", exp: "Lỗi sai tại 'freshing'. Không khí trong lành là cụm danh từ chuẩn mực 'fresh air'. Sửa lỗi: freshing => fresh." },
+                    { id: "13_7", q: "Her family's <u>members</u> (A) are <u>hospitable</u> (B) and <u>generously</u> (C) to <u>visitors</u> (D).", options: ["members", "hospitable", "generously", "visitors"], answer: "generously", type: "mcq", exp: "Lỗi sai tại 'generously'. Đứng sau tobe 'are' làm nhiệm vụ vị ngữ song hành với 'hospitable' ta cần tính từ. Sửa lỗi: generously => generous." },
+                    { id: "13_8", q: "Ms. Anh <u>talks</u> (A) to <u>children</u> (B) more <u>gently</u> (C) <u>as</u> (D) other people in this event.", options: ["talks", "children", "gently", "as"], answer: "as", type: "mcq", exp: "Lỗi sai tại giới từ 'as'. Cấu trúc so sánh hơn bắt buộc sử dụng từ so sánh 'than'. Sửa lỗi: as => than." }
+                ]
+            },
+            "ex14": {
+                title: "Exercise 14: Use the adjectives in comparative forms",
+                desc: "Chọn dạng so sánh hơn hoàn chỉnh chính xác của tính từ trong ngoặc đơn:",
+                questions: [
+                    { id: "14_1", q: "My sister is _______ me. (tall)", options: ["taller than", "tall than", "more tall than", "tallest than"], answer: "taller than", type: "mcq", exp: "Tall là tính từ ngắn 1 âm tiết, so sánh hơn thêm '-er' đi kèm từ 'than'." },
+                    { id: "14_2", q: "My new bed is _______ my old bed. (comfortable)", options: ["comfortabler than", "more comfortable than", "comfortabler", "more comfortable"], answer: "more comfortable than", type: "mcq", exp: "Comfortable là tính từ dài, so sánh hơn dùng cấu trúc 'more comfortable than'." },
+                    { id: "14_3", q: "Tea is _______ coffee. (cheap)", options: ["cheaper than", "cheap than", "more cheap than", "cheapest than"], answer: "cheaper than", type: "mcq", exp: "Cheap là tính từ ngắn, dạng so sánh hơn thêm đuôi '-er' đi cùng 'than' là 'cheaper than'." },
+                    { id: "14_4", q: "The Mekong River is _______ the Red River. (long)", options: ["longer than", "more long than", "longer", "longest than"], answer: "longer than", type: "mcq", exp: "Long là tính từ ngắn, dạng so sánh hơn là 'longer than'." },
+                    { id: "14_5", q: "The film about my village town is _______ the book. (interesting)", options: ["interestinger than", "more interesting than", "more interesting", "interestinger"], answer: "more interesting than", type: "mcq", exp: "Interesting là tính từ dài có nhiều âm tiết, so sánh hơn là 'more interesting than'." },
+                    { id: "14_6", q: "The countryside is _______ the town. (beautiful)", options: ["beautifuler than", "more beautiful than", "more beautiful", "beautifuler"], answer: "more beautiful than", type: "mcq", exp: "Beautiful là tính từ dài, so sánh hơn là 'more beautiful than'." },
+                    { id: "14_7", q: "Do you think English is _______ French in grammar? (easy)", options: ["easier than", "easyer than", "more easy than", "easier"], answer: "easier than", type: "mcq", exp: "Easy là tính từ ngắn đặc biệt kết thúc bằng y dài, biến đổi thành i ngắn rồi thêm '-er' đi cùng 'than'." },
+                    { id: "14_8", q: "Blue whales are _______ elephants. (heavy)", options: ["heavier than", "heavyer than", "more heavy than", "heavier"], answer: "heavier than", type: "mcq", exp: "Heavy kết thúc bằng 'y', biến đổi thành i ngắn rồi thêm '-er' đi kèm 'than' tạo thành 'heavier than'." },
+                    { id: "14_9", q: "The new harvest machine is _______ the old one. (effective)", options: ["more effective than", "effectiver than", "more effective", "effectiver"], answer: "more effective than", type: "mcq", exp: "Effective là tính từ dài, so sánh hơn là 'more effective than'." },
+                    { id: "14_10", q: "A tractor is _______ a buffalo. (powerful)", options: ["powerfuler than", "more powerful than", "powerfuler", "more powerful"], answer: "more powerful than", type: "mcq", exp: "Powerful là tính từ dài có 3 âm tiết, so sánh hơn dùng dạng 'more powerful than'." }
+                ]
+            },
+            "ex15": {
+                title: "Exercise 15: Word form formatting",
+                desc: "Chọn từ loại biến đổi chính xác nhất của từ gốc trong ngoặc đơn để hoàn thiện câu văn:",
+                questions: [
+                    { id: "15_1", q: "_______ are very friendly and hospitable. (village)", options: ["Villagers", "Villages", "Villager", "Villaging"], answer: "Villagers", type: "mcq", exp: "Đóng vai trò làm chủ ngữ số nhiều kết hợp động từ tobe số nhiều 'are', ta cần danh từ chỉ người dân làng: 'Villagers'." },
+                    { id: "15_2", q: "My grandfather owns a valuable _______ of stamps. (collect)", options: ["collecting", "collector", "collection", "collected"], answer: "collection", type: "mcq", exp: "Sau tính từ 'valuable' ta cần một danh từ để chỉ vật sở hữu bộ sưu tập: 'collection'." },
+                    { id: "15_3", q: "Spring coming, the hills are _______ with many species of wild flowers blooming. (color)", options: ["colorful", "colorless", "coloring", "colorfully"], answer: "colorful", type: "mcq", exp: "Đứng sau tobe 'are' ta cần tính từ mang nghĩa rực rỡ sắc màu tươi đẹp: 'colorful'." },
+                    { id: "15_4", q: "Each nation tries to work hard to protect the world _______. (peaceful)", options: ["peace", "peacefully", "peaces", "peaced"], answer: "peace", type: "mcq", exp: "Bảo vệ hòa bình thế giới, ta cần một danh từ đứng sau động từ và mạo từ sở hữu làm tân ngữ: 'peace'." },
+                    { id: "15_5", q: "_______ a camel is the most exciting activity I have ever experienced. (ride)", options: ["Riding", "Rider", "Rided", "Rides"], answer: "Riding", type: "mcq", exp: "Đóng vai trò làm chủ ngữ đứng đầu câu chỉ hành động cưỡi lạc đà ta cần danh động từ: 'Riding'." },
+                    { id: "15_6", q: "Nomads usually move to get food and find lands to _______. (farmer)", options: ["farm", "farming", "farms", "farmed"], answer: "farm", type: "mcq", exp: "Đứng sau phó từ mục đích 'to' ta cần động từ nguyên thể mang nghĩa trồng trọt chăn nuôi làm ruộng: 'farm'." },
+                    { id: "15_7", q: "Country children often react less quickly to technical _______ than city children. (develop)", options: ["development", "developing", "develops", "developed"], answer: "development", type: "mcq", exp: "Sự phát triển kỹ thuật công nghệ là cụm từ ghép danh từ: 'technical development'." },
+                    { id: "15_8", q: "You must drive _______ on the city roads or you will take high risk of getting accidents. (care)", options: ["carefully", "careless", "care", "carelessly"], answer: "carefully", type: "mcq", exp: "Bổ trợ cho động từ lái xe 'drive', ta cần trạng từ mang nghĩa tích cực cẩn thận an toàn: 'carefully'." },
+                    { id: "15_9", q: "During my stay in the village, I was _______ with several local farmers. (friend)", options: ["friendly", "friendship", "friends", "friended"], answer: "friendly", type: "mcq", exp: "Cấu trúc tính từ miêu tả thái độ thiện chí chan hòa ấm áp: 'be friendly with someone' (thân thiện với ai đó)." },
+                    { id: "15_10", q: "Local people in the village often wear their _______ costumer during the festivals. (tradition)", options: ["traditional", "traditionally", "traditions", "traditionalism"], answer: "traditional", type: "mcq", exp: "Đứng trước bổ trợ cho danh từ trang phục 'costumer', ta cần tính từ mang nét truyền thống văn hóa dân tộc: 'traditional'." }
+                ]
+            }
+        };
+
+        let currentPoints = 0;
+        let answeredQuestions = {}; // Format: { questionId: { correct: boolean, choice: string } }
+        let currentTab = "ex3";
+
+        // DRAWING SYSTEM FOR EXERCISE 6 GRAPHICS
+        function getSVGGraphic(type) {
+            switch(type) {
+                case "combine_harvester":
+                    return `<svg viewBox="0 0 100 100" class="w-full h-full max-h-24"><rect x="20" y="35" width="50" height="30" rx="6" fill="#E74C3C"/><circle cx="35" cy="65" r="12" fill="#2C3E50" stroke="#FFF" stroke-width="2"/><circle cx="65" cy="65" r="12" fill="#2C3E50" stroke="#FFF" stroke-width="2"/><rect x="68" y="45" width="15" height="10" fill="#F1C40F"/><line x1="25" y1="25" x2="45" y2="35" stroke="#34495E" stroke-width="3"/></svg>`;
+                case "buffalo":
+                    return `<svg viewBox="0 0 100 100" class="w-full h-full max-h-24"><ellipse cx="50" cy="55" rx="25" ry="18" fill="#7F8C8D"/><circle cx="50" cy="35" r="12" fill="#7F8C8D"/><path d="M30 25 Q15 20 25 35 Q30 35 38 32" fill="none" stroke="#2C3E50" stroke-width="3"/><path d="M70 25 Q85 20 75 35 Q70 35 62 32" fill="none" stroke="#2C3E50" stroke-width="3"/><rect x="35" y="70" width="8" height="15" fill="#5F6F7F"/><rect x="57" y="70" width="8" height="15" fill="#5F6F7F"/></svg>`;
+                case "drying_rice":
+                    return `<svg viewBox="0 0 100 100" class="w-full h-full max-h-24"><circle cx="50" cy="30" r="14" fill="#FF9F43"/><path d="M50 5 L50 12 M50 48 L50 55 M25 30 L18 30 M75 30 L82 30" stroke="#FF9F43" stroke-width="3"/><ellipse cx="35" cy="75" rx="15" ry="6" fill="#F1C40F"/><ellipse cx="65" cy="75" rx="15" ry="6" fill="#F39C12"/></svg>`;
+                case "paddy_fields":
+                    return `<svg viewBox="0 0 100 100" class="w-full h-full max-h-24"><path d="M 0 85 Q 25 65 50 85 T 100 85 L 100 100 L 0 100 Z" fill="#2ECC71"/><path d="M 0 65 Q 25 50 50 65 T 100 65 L 100 100 L 0 100 Z" fill="#27AE60"/><path d="M 15 50 L 15 40 M 45 45 L 45 35 M 75 48 L 75 38" stroke="#F1C40F" stroke-width="2.5"/></svg>`;
+                case "picking_fruits":
+                    return `<svg viewBox="0 0 100 100" class="w-full h-full max-h-24"><rect x="46" y="50" width="8" height="40" fill="#8B4513"/><circle cx="50" cy="40" r="22" fill="#2ECC71"/><circle cx="42" cy="35" r="4" fill="#FF4757"/><circle cx="58" cy="45" r="4" fill="#FF4757"/><rect x="35" y="75" width="30" height="15" rx="3" fill="#D2B48C"/></svg>`;
+                case "milking_cow":
+                    return `<svg viewBox="0 0 100 100" class="w-full h-full max-h-24"><ellipse cx="50" cy="50" rx="28" ry="16" fill="#FFF" stroke="#2C3E50" stroke-width="3"/><circle cx="38" cy="44" r="5" fill="#000"/><circle cx="62" cy="54" r="7" fill="#000"/><ellipse cx="45" cy="64" rx="8" ry="5" fill="#FFC0CB"/><rect x="62" y="70" width="12" height="12" fill="#BDC3C7" stroke="#95A5A6" stroke-width="2"/></svg>`;
+                case "small_village":
+                    return `<svg viewBox="0 0 100 100" class="w-full h-full max-h-24"><rect x="15" y="55" width="25" height="25" fill="#F1C40F"/><polygon points="10,55 27,35 45,55" fill="#E74C3C"/><rect x="55" y="50" width="30" height="30" fill="#F39C12"/><polygon points="50,50 70,30 90,50" fill="#C0392B"/></svg>`;
+                default:
+                    return '';
+            }
+        }
+
+        // GENERATING MENU TABS
+        function buildTabs() {
+            const tabsContainer = document.getElementById("tabs-container");
+            tabsContainer.innerHTML = "";
+            let partNumber = 1;
+
+            for (const key in exercises) {
+                const ex = exercises[key];
+                const cleanTitle = ex.title.split(":")[0];
+                const btn = document.createElement("button");
+                btn.id = `tab-btn-${key}`;
+                btn.className = `py-2 px-3 rounded-2xl text-xs md:text-sm font-black text-purple-700 bg-white border-b-4 border-purple-200 transition-all hover:bg-purple-50 active:translate-y-1 hover:scale-[1.02] active:border-b-0 flex items-center justify-center gap-1.5 shadow-sm`;
+                btn.innerHTML = `<i class="fa-solid fa-star-and-crescent text-yellow-400"></i> P.${partNumber}: ${cleanTitle}`;
+                btn.onclick = () => selectTab(key);
+                tabsContainer.appendChild(btn);
+                partNumber++;
+            }
+            // Init active state
+            selectTab(currentTab);
+        }
+
+        // TAB SWITCH LOGIC ("Các bài ở trên và khi nhấn vào sẽ ra các câu của bài đó")
+        function selectTab(tabKey) {
+            currentTab = tabKey;
+            
+            // Toggle active classes
+            document.querySelectorAll("#tabs-container button").forEach(btn => {
+                btn.classList.remove("tab-active");
+            });
+            const activeBtn = document.getElementById(`tab-btn-${tabKey}`);
+            if (activeBtn) activeBtn.classList.add("tab-active");
+
+            // Render current exercise questions
+            renderExercise(tabKey);
+            playSound('correct');
+        }
+
+        // RENDER ACTIVE QUESTIONS LIST INSIDE VIEWPORT
+        function renderExercise(tabKey) {
+            const exView = document.getElementById("exercise-view");
+            const ex = exercises[tabKey];
+            
+            let html = `
+                <div class="mb-6 border-b-4 border-dashed border-purple-100 pb-4">
+                    <h2 class="text-xl md:text-2xl font-black text-purple-700 flex items-center gap-2 mb-2">
+                        <span class="bg-purple-100 text-purple-700 py-1 px-3 rounded-2xl text-xs uppercase tracking-wider font-extrabold shadow-sm">Đang học</span>
+                        ${ex.title}
+                    </h2>
+                    <p class="text-sm font-bold text-gray-500 italic"><i class="fa-solid fa-circle-info text-teal-400"></i> ${ex.desc}</p>
+                </div>
+                <div class="space-y-8">
+            `;
+
+            ex.questions.forEach((q, idx) => {
+                const isAnswered = answeredQuestions[q.id];
+                let cardClass = "bg-purple-50/50 border-2 border-purple-100 rounded-3xl p-5 md:p-6 shadow-sm relative transition-all duration-300";
+                
+                if (isAnswered) {
+                    cardClass = isAnswered.correct 
+                        ? "bg-green-50/70 border-4 border-[#00D26A] rounded-3xl p-5 md:p-6 shadow-md relative"
+                        : "bg-red-50/70 border-4 border-[#FF4757] rounded-3xl p-5 md:p-6 shadow-md relative shake";
+                }
+
+                html += `
+                    <div class="${cardClass}" id="card-${q.id}">
+                        <!-- Top Tag -->
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="bg-purple-600 text-white font-extrabold px-3 py-1 rounded-xl text-xs shadow-sm uppercase">Câu ${idx + 1}</span>
+                            ${isAnswered ? (isAnswered.correct ? '<span class="text-[#00D26A] font-black text-sm"><i class="fa-solid fa-circle-check"></i> ĐÚNG RỒI!</span>' : '<span class="text-[#FF4757] font-black text-sm"><i class="fa-solid fa-circle-xmark"></i> CHƯA ĐÚNG!</span>') : ''}
+                        </div>
+                `;
+
+                // Render questions differently depending on type
+                if (q.type === "mcq") {
+                    html += `<p class="text-base md:text-lg font-black text-gray-800 leading-relaxed mb-4">${q.q}</p>`;
+                    
+                    // Special Sign visualization for Duong Lam village
+                    if (q.isSpecialSign) {
+                        html += `
+                            <div class="my-4 flex justify-center">
+                                <div class="sale-sign p-4 rounded-2xl text-white text-center w-48">
+                                    <div class="font-black text-xl tracking-wider">SALE 50%</div>
+                                    <div class="text-xs font-bold text-yellow-300">CỔNG LÀNG ĐƯỜNG LÂM</div>
+                                </div>
+                            </div>
+                        `;
+                    }
+
+                    // Mobile mockup visualization for Harvester
+                    if (q.isPhoneChat) {
+                        html += `
+                            <div class="my-4 flex justify-center">
+                                <div class="phone-chat w-56 overflow-hidden">
+                                    <div class="bg-slate-700 text-white p-2 text-xs font-bold text-center flex items-center justify-center gap-1"><i class="fa-solid fa-user-astronaut"></i> Aly Family</div>
+                                    <div class="p-3 space-y-2 bg-slate-50 text-[11px] font-bold">
+                                        <div class="bg-purple-100 text-purple-800 p-2 rounded-lg max-w-[80%]">Hi John! We are harvesting!</div>
+                                        <div class="bg-teal-100 text-teal-800 p-2 rounded-lg max-w-[80%] self-end ml-auto">Cool! Using machine?</div>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    }
+
+                    html += `<div class="grid grid-cols-1 sm:grid-cols-2 gap-3">`;
+                    
+                    q.options.forEach(opt => {
+                        let btnStyle = "bg-white border-2 border-purple-200 text-purple-900 font-extrabold p-3.5 rounded-2xl text-left transition-all hover:scale-[1.02] active:scale-[0.98] border-b-4 hover:bg-purple-50 shadow-sm flex items-center gap-2";
+                        let btnIcon = `<i class="fa-regular fa-circle text-purple-300"></i>`;
+                        let isDisabled = isAnswered ? 'disabled' : '';
+
+                        if (isAnswered) {
+                            if (opt === q.answer) {
+                                btnStyle = "bg-[#00D26A] text-white font-extrabold p-3.5 rounded-2xl text-left border-b-4 border-[#009e50] shadow-sm flex items-center gap-2 scale-[1.02]";
+                                btnIcon = `<i class="fa-solid fa-circle-check text-white"></i>`;
+                            } else if (isAnswered.choice === opt) {
+                                btnStyle = "bg-[#FF4757] text-white font-extrabold p-3.5 rounded-2xl text-left border-b-4 border-[#d63031] shadow-sm flex items-center gap-2";
+                                btnIcon = `<i class="fa-solid fa-circle-xmark text-white"></i>`;
+                            } else {
+                                btnStyle = "bg-white border-2 border-gray-100 text-gray-300 font-bold p-3.5 rounded-2xl text-left flex items-center gap-2 opacity-50";
+                            }
+                        }
+
+                        html += `
+                            <button ${isDisabled} onclick="checkMCQ('${q.id}', '${opt}', '${q.answer}')" class="${btnStyle}">
+                                ${btnIcon} <span>${opt}</span>
+                            </button>
+                        `;
+                    });
+                    html += `</div>`;
+
+                } else if (q.type === "gapfill") {
+                    // Gap Fill renderer with nice interactive button inside text
+                    let processedSentence = q.q;
+                    const regex = /\[(.*?)\]/;
+                    const match = q.q.match(regex);
+                    if (match) {
+                        const defaultLabel = isAnswered ? isAnswered.choice : "Bấm vào đây để chọn từ...";
+                        const btnColor = isAnswered 
+                            ? (isAnswered.correct ? "bg-[#00D26A] text-white border-[#009e50]" : "bg-[#FF4757] text-white border-[#d63031]")
+                            : "bg-amber-100 text-amber-900 border-amber-300 animate-pulse";
+                        
+                        const gapBtn = `
+                            <button ${isAnswered ? 'disabled' : ''} onclick="openGapSelector('${q.id}', '${q.answer}')" class="${btnColor} border-2 border-dashed rounded-xl px-4 py-1.5 font-extrabold mx-1.5 transition-all transform hover:scale-[1.05] shadow-sm text-sm">
+                                ${defaultLabel} <i class="fa-solid fa-caret-down text-xs ml-1"></i>
+                            </button>
+                        `;
+                        processedSentence = q.q.replace(regex, gapBtn);
+                    }
+
+                    html += `
+                        <p class="text-base md:text-lg font-black text-gray-800 leading-loose mb-2">
+                            ${processedSentence}
+                        </p>
+                    `;
+
+                } else if (q.type === "matching") {
+                    // Interactive matching graphic card with drop-down selector
+                    html += `
+                        <div class="flex flex-col md:flex-row items-center gap-6">
+                            <div class="w-full md:w-1/3 bg-white p-3 rounded-2xl border-2 border-purple-100 flex items-center justify-center shadow-inner">
+                                ${getSVGGraphic(q.graphic)}
+                            </div>
+                            <div class="w-full md:w-2/3">
+                                <p class="text-base font-bold text-gray-500 mb-2">Ghép cụm từ đúng miêu tả hình ảnh trên:</p>
+                                <div class="relative">
+                    `;
+
+                    if (isAnswered) {
+                        const isCorrect = isAnswered.correct;
+                        const cardBg = isCorrect ? 'bg-[#00D26A] text-white border-[#009e50]' : 'bg-[#FF4757] text-white border-[#d63031]';
+                        html += `
+                            <div class="${cardBg} border-2 font-extrabold p-3.5 rounded-2xl text-sm flex items-center justify-between shadow-sm">
+                                <span><i class="fa-solid fa-circle-check mr-2"></i> ${isAnswered.choice}</span>
+                                <span class="text-xs uppercase font-black">${isCorrect ? 'Đúng' : 'Sai'}</span>
+                            </div>
+                        `;
+                    } else {
+                        html += `
+                            <button onclick="openGapSelector('${q.id}', '${q.answer}')" class="w-full bg-amber-50 text-amber-800 border-2 border-amber-200 hover:bg-amber-100 font-extrabold p-3.5 rounded-2xl text-left transition-all border-b-4 flex items-center justify-between shadow-sm text-sm">
+                                <span><i class="fa-solid fa-hand-pointer text-amber-500 mr-2"></i> Chọn cụm từ mô tả...</span>
+                                <i class="fa-solid fa-caret-down"></i>
+                            </button>
+                        `;
+                    }
+
+                    html += `
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                // EXPLANATION SECTION WITH MASTERS DEGREE STYLE (SIÊU CHI TIẾT)
+                if (isAnswered) {
+                    html += `
+                        <div class="mt-5 bg-gradient-to-r from-blue-50 to-indigo-50 border-l-4 border-blue-500 rounded-2xl p-4 md:p-5 text-sm leading-relaxed animate-fade-in shadow-inner">
+                            <h5 class="text-blue-800 font-black mb-2 flex items-center gap-2 text-base">
+                                <span class="bg-blue-500 text-white py-0.5 px-2 rounded-lg text-xs font-black uppercase">Thạc sỹ</span>
+                                Cô Lê Hằng Giải Thích Siêu Chi Tiết:
+                            </h5>
+                            <p class="text-slate-700 font-semibold mb-3 leading-loose">
+                                <i class="fa-solid fa-feather-pointed text-purple-500"></i> ${q.exp}
+                            </p>
+                            <div class="bg-white/75 p-3 rounded-xl border border-blue-100 text-xs text-slate-500 font-bold space-y-1 shadow-sm">
+                                <div class="text-purple-600 font-black"><i class="fa-solid fa-circle-info mr-1"></i> Gợi Ý Học Tập:</div>
+                                <div>- Đọc kỹ phần dịch câu và giải nghĩa từ để hiểu trọn vẹn ngữ cảnh của đề bài.</div>
+                                <div>- Hãy chuẩn bị một cuốn vở nhỏ, chép lại từ vựng hoặc cấu trúc so sánh trạng từ này ngay nhé!</div>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                html += `</div>`;
+            });
+
+            html += `</div>`;
+            exView.innerHTML = html;
+        }
+
+        // MCQ ANSWER INTERACTION
+        function checkMCQ(qId, selectedOpt, correctAns) {
+            if (answeredQuestions[qId]) return; // Guard
+
+            const isCorrect = selectedOpt === correctAns;
+            answeredQuestions[qId] = {
+                correct: isCorrect,
+                choice: selectedOpt
+            };
+
+            if (isCorrect) {
+                currentPoints += 10;
+                playSound('correct');
+                spawnConfetti();
+            } else {
+                playSound('wrong');
+                // Trigger shake effect
+                const card = document.getElementById(`card-${qId}`);
+                if (card) {
+                    card.classList.add("shake");
+                    setTimeout(() => card.classList.remove("shake"), 400);
+                }
+            }
+
+            updateProgress();
+            renderExercise(currentTab);
+        }
+
+        // POPUP DIALOG FOR GAP FILL & MATCHING CHOOSE
+        let activeGapFillId = null;
+        let activeCorrectAns = null;
+
+        function openGapSelector(qId, correctAns) {
+            activeGapFillId = qId;
+            activeCorrectAns = correctAns;
+
+            const choicesAnchor = document.getElementById("choices-anchor");
+            choicesAnchor.innerHTML = "";
+
+            // Find question details
+            let targetQ = null;
+            for (const k in exercises) {
+                const found = exercises[k].questions.find(item => item.id === qId);
+                if (found) {
+                    targetQ = found;
+                    break;
+                }
+            }
+
+            if (!targetQ) return;
+
+            // Generate scrambled options
+            const scrambled = [...targetQ.options || targetQ.choices];
+            scrambled.sort(() => Math.random() - 0.5);
+
+            scrambled.forEach(opt => {
+                const btn = document.createElement("button");
+                btn.className = "w-full bg-purple-50 text-purple-900 border-2 border-purple-200 hover:bg-purple-100 font-extrabold py-3 px-4 rounded-xl text-left border-b-4 active:translate-y-0.5 transition-all text-sm";
+                btn.innerText = opt;
+                btn.onclick = () => selectGapAnswer(opt);
+                choicesAnchor.appendChild(btn);
+            });
+
+            document.getElementById("selector-overlay").classList.remove("hidden");
+            setTimeout(() => {
+                document.getElementById("selector-box").classList.remove("scale-95");
+            }, 10);
+        }
+
+        function selectGapAnswer(selectedOpt) {
+            const isCorrect = selectedOpt === activeCorrectAns;
+            answeredQuestions[activeGapFillId] = {
+                correct: isCorrect,
+                choice: selectedOpt
+            };
+
+            if (isCorrect) {
+                currentPoints += 10;
+                playSound('correct');
+                spawnConfetti();
+            } else {
+                playSound('wrong');
+            }
+
+            closeSelector();
+            updateProgress();
+            renderExercise(currentTab);
+        }
+
+        function closeSelector() {
+            document.getElementById("selector-box").classList.add("scale-95");
+            setTimeout(() => {
+                document.getElementById("selector-overlay").classList.add("hidden");
+            }, 150);
+        }
+
+        // UPDATE FOOTER SCORE & PROGRESS BAR
+        function updateProgress() {
+            // Calculate progress bar percentage
+            let totalQuestions = 0;
+            for (const k in exercises) {
+                totalQuestions += exercises[k].questions.length;
+            }
+            const completedCount = Object.keys(answeredQuestions).length;
+            const percent = totalQuestions > 0 ? (completedCount / totalQuestions) * 100 : 0;
+            
+            document.getElementById("progress-bar-fill").style.width = `${percent}%`;
+            document.getElementById("star-score-text").innerText = currentPoints;
+        }
+
+        // SUBMIT EXAMINATION AND RETRIEVE MS LE HANG ADVICE
+        function submitTest() {
+            let totalQuestions = 0;
+            for (const k in exercises) {
+                totalQuestions += exercises[k].questions.length;
+            }
+            const completedCount = Object.keys(answeredQuestions).length;
+            
+            // Check if student completed some exercises first
+            if (completedCount === 0) {
+                playSound('wrong');
+                // Open result modal indicating they must try first
+                showModal("Con ơi, hãy thử làm các bài tập trước khi nộp nhé! Cố gắng lên nào!", 0, 0, 0);
+                return;
+            }
+
+            let correctCount = 0;
+            for (const key in answeredQuestions) {
+                if (answeredQuestions[key].correct) {
+                    correctCount++;
+                }
+            }
+
+            const percent = Math.round((correctCount / totalQuestions) * 100);
+            
+            let commentText = "";
+            if (percent < 50) {
+                commentText = "Điểm lần này chưa cao lắm, con cố gắng đọc kĩ giải thích đáp án và làm lại nha. Cô tin con sẽ làm tốt hơn ở lần sau!";
+                playSound('wrong');
+            } else if (percent >= 60 && percent <= 80) {
+                commentText = "Con đã có tiến bộ khá ổn rồi, con cố gắng đọc kĩ giải thích đáp án và làm lại nha. Cô tin con sẽ làm tốt hơn ở lần sau!";
+                playSound('correct');
+                spawnConfetti();
+            } else {
+                commentText = "Làm tốt lắm, con cố gắng ring điểm 10 ở lần sau nha!";
+                playSound('correct');
+                spawnConfetti();
+                setTimeout(spawnConfetti, 1000); // Super fireworks
+            }
+
+            showModal(commentText, percent, correctCount, totalQuestions);
+        }
+
+        function showModal(comment, percent, correct, total) {
+            document.getElementById("result-score-percent").innerText = `${percent}%`;
+            document.getElementById("result-score-fraction").innerText = `(${correct}/${total} câu chính xác)`;
+            document.getElementById("result-comment").innerText = comment;
+            
+            document.getElementById("result-modal").classList.remove("hidden");
+        }
+
+        function closeResultModal() {
+            document.getElementById("result-modal").classList.add("hidden");
+        }
+
+        function restartTest() {
+            answeredQuestions = {};
+            currentPoints = 0;
+            currentTab = "ex3";
+            updateProgress();
+            buildTabs();
+            closeResultModal();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // INITIALIZE APP
+        window.onload = function() {
+            buildTabs();
+            updateProgress();
+        }
+    </script>
+</body>
+</html>
